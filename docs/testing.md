@@ -42,4 +42,4 @@ Screenshots show actual demo-mode browser states. No real person was contacted a
 
 ## Clean checkout check
 
-Recorded after the final local clone, dependency install, tests and build complete.
+A fresh local Git clone was created from the project repository. In that clone, `npm ci`, all 16 standard tests and `npm run build` completed successfully. No copied `node_modules`, `.env` or build directory was used. This verifies a clean local clone; an actual GitHub clone remains pending until publication.
