@@ -1,0 +1,21 @@
+import test, { before, after } from 'node:test';
+import assert from 'node:assert/strict';
+import mongoose from 'mongoose';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import request from 'supertest';
+import { createApp } from '../server/app.js';
+import { Item } from '../server/item.js';
+let mongo;
+const app = createApp();
+const good = { title: 'Blue backpack', description: 'A blue backpack near the main entrance.', type: 'found', category: 'Bags & accessories', location: 'Main entrance', date: '2026-01-10', contact: 'finder@example.com' };
+before(async () => { mongo = await MongoMemoryServer.create(); await mongoose.connect(mongo.getUri('reunite_test')); });
+after(async () => { await mongoose.disconnect(); if (mongo) await mongo.stop(); });
+test('create, read and return an item using real MongoDB', async () => {
+  const created = await request(app).post('/api/items').send(good).expect(201);
+  assert.equal(created.body.status, 'open');
+  const list = await request(app).get('/api/items').expect(200);
+  assert.ok(list.body.some(x => x._id === created.body._id));
+  const changed = await request(app).patch(`/api/items/${created.body._id}/status`).send({ status: 'returned' }).expect(200);
+  assert.equal(changed.body.status, 'returned');
+  assert.equal((await Item.findById(created.body._id)).status, 'returned');
+});
