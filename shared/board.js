@@ -1,3 +1,9 @@
+export function getDateRangeError(startDate = '', endDate = '') {
+  return startDate && endDate && endDate < startDate
+    ? 'End date must be on or after the start date.'
+    : '';
+}
+
 export function selectItems(
   items,
   {
@@ -7,8 +13,11 @@ export function selectItems(
     savedOnly = false,
     saved = [],
     sort = 'newest',
+    startDate = '',
+    endDate = '',
   } = {},
 ) {
+  if (getDateRangeError(startDate, endDate)) return [];
   const needle = query.trim().toLowerCase();
   return items
     .filter(
@@ -22,7 +31,9 @@ export function selectItems(
           (type === 'returned'
             ? item.status === 'returned'
             : item.type === type && item.status === 'open')) &&
-        (!savedOnly || saved.includes(item._id)),
+        (!savedOnly || saved.includes(item._id)) &&
+        (!startDate || item.date >= startDate) &&
+        (!endDate || item.date <= endDate),
     )
     .sort((a, b) =>
       sort === 'oldest' ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date),

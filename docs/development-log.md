@@ -1,6 +1,6 @@
 # Development log
 
-Development was performed with ChatGPT/Codex in one session. The commits are genuine staged changes from that session, not a fabricated multi-day timeline. The student needs to run the project, review the code and personalise the reflection.
+Development was performed with ChatGPT/Codex in one session. The commits are genuine staged changes from that session, not a fabricated multi-day timeline. The student subsequently ran the project on Windows, verified local MongoDB persistence, ran tests and a build, updated the reflection and published the repository.
 
 ## Stage 1 — API and data foundation
 
@@ -38,6 +38,24 @@ Development was performed with ChatGPT/Codex in one session. The commits are gen
 - Added setup, modes, API, component overview, prompt record and reflection draft documentation.
 - Clean-checkout installation and build results are in docs/testing.md.
 
-## Remaining student work
+## Stage 5 — Student Windows verification and publication
 
-Run the app locally, verify MongoDB persistence, make a personal iteration based on testing, personalise the reflection and publish the preserved repository history to GitHub.
+- The student started MongoDB, seeded the application and ran the persistent MERN mode.
+- A newly created post remained after an application restart.
+- All 16 original tests and the production build passed on Windows.
+- The student published the repository and updated the README with local test observations.
+- The coding assistant installed and tested a clean clone from the published GitHub URL: dependencies, all 16 original tests, build, demo startup and proxied sample data succeeded.
+
+## Stage 6 — User-requested date range filter
+
+- Used the user's actual date-filter prompt recorded in docs/prompts.md.
+- Added optional inclusive From/To fields for the lost/found event date.
+- Composed dates with search, category, report type/status, saved items and sorting.
+- Rejected an end date before the start date with an inline alert and a separate invalid-range state.
+- Added Clear dates while retaining other filters; the existing Clear filters action now resets dates too.
+- Added 10 focused board tests; all 26 standard tests and the production build passed.
+- Browser checks verified inclusive boundaries, combinations, reversed ranges, date-only reset and full reset. Captured new working and validation screenshots.
+
+## Remaining review
+
+The student should pull the feature update and review it on Windows. Automated live MongoDB integration, returned-status persistence across restarts, dedicated mobile viewport testing and a full accessibility audit remain separate from the completed checks.

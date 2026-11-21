@@ -16,14 +16,16 @@ This project was chosen for the Introduction to AI Vibe Coding Challenge because
 
 - Report either a lost or found item with client and server validation.
 - Search item names, descriptions and locations, ignoring case and surrounding spaces.
-- Combine category and open lost/found/returned filters.
+- Combine search, category, open lost/found/returned status and an inclusive date range.
+- Filter by either or both dates the item was lost or found. Reversed ranges show a clear error.
+- Clear dates independently, or reset all filters from the empty state.
 - Sort by the date the item was lost or found, newest or oldest first.
 - Open item details and a contact email link.
 - Confirm before marking an item returned; board counts update immediately.
 - Bookmark posts locally and view a Saved board. Bookmarks survive a browser refresh.
 - Loading, empty, error and success states; keyboard focus styles and native modal dialogs.
 - Responsive CSS for desktop, tablet and narrow screens.
-- Six fictional sample posts and two screenshots of the running application.
+- Six fictional sample posts and screenshots of the running application, including date filtering and validation.
 
 ## Technologies
 
@@ -170,13 +172,13 @@ The interface exposes the returned transition. The API also accepts `open` to su
 
 AI helped turn an application choice into React components, an Express API, a Mongoose schema and testable helper functions. It also helped diagnose failed startup assumptions and separate a runnable demo from real database verification.
 
-Three examples from my planning and troubleshooting conversation were:
+Three examples from my planning, troubleshooting and refinement conversation were:
 
 1. **“or MERN application?”** — established MongoDB, Express, React, and Node.js as the technology stack.
-2. **“Ok lets create Campus Lost and Found Application ”** — selected the campus lost-and-found idea and started implementation.
-3. **Shared the `npm ci` error: “can only install with an existing package-lock.json”** — helped identify that I was running the command in the outer folder. Switching into `reunite` allowed installation to succeed.
+2. **Shared the `npm ci` error: “can only install with an existing package-lock.json”** — helped identify that I was running the command in the outer folder. Switching into `reunite` allowed installation to succeed.
+3. **“Add a date range filter to Reunite. It should work together with search, category, and status filters. Validate that the end date is not before the start date, and test the filtering behavior.”** — led to inclusive From/To controls, combined filtering, a reversed-range error, reset controls and 10 new automated tests. The resulting suite passes all 26 tests, and the browser behavior was checked separately.
 
-These examples show project planning and troubleshooting based on actual terminal output. Further development details are recorded in [the development log](docs/development-log.md) and [the prompt notes](docs/prompts.md).
+These examples show how broad planning became troubleshooting using actual terminal output, followed by a specific feature request with validation and testing requirements. Further details are recorded in [the development log](docs/development-log.md) and [the prompt notes](docs/prompts.md).
 
 ## Screenshots
 
@@ -192,6 +194,20 @@ These are actual browser screenshots from temporary demo mode, not mockups.
 
 The charger uses the Electronics category illustration. Illustrations are not item photographs.
 
+### Combined search, category, status and date filters
+
+![Date range combined with Library search, Electronics category and Found status](docs/screenshots/date-range.jpg)
+
+### Reversed range validation
+
+![End date before start date displays an error instead of matching results](docs/screenshots/date-range-error.jpg)
+
+## Using the date range filter
+
+Under **Lost or found date**, enter **From**, **To**, or both. The dates refer to when an item was lost or found, not when its post was created. Both boundaries are inclusive, and the same date in both fields searches one day. Dates combine with search, category, status, saved items and sort order.
+
+An end date before the start date displays **“End date must be on or after the start date.”** and hides results until the dates are corrected or cleared. **Clear dates** retains the other filters. **Clear filters** in a no-match state resets the search, category, status and dates.
+
 ## Testing
 
 ```bash
@@ -199,7 +215,7 @@ npm test
 npm run build
 ```
 
-The standard suite contains **16 passing tests**, covering API creation/listing/status changes, invalid input, malicious extra fields, malformed JSON, body limits, missing IDs, filters, counts, sorting, and Mongoose schema validation without a live database.
+The standard suite contains **26 passing tests**, covering API creation/listing/status changes, invalid input, malicious extra fields, malformed JSON, body limits, missing IDs, filters, counts, sorting, inclusive and one-sided date ranges, same-day ranges, reversed-range validation, combined date/search/category/status/bookmark filtering, and Mongoose schema validation without a live database.
 
 **The standard API tests use the explicit demo repository.** A separate test exercises the real MongoDB path:
 
@@ -211,7 +227,9 @@ In the coding workspace, MongoDB 8 failed during CPU detection and MongoDB 7 fai
 
 On Windows, the MongoDB application ran successfully, all 16 standard tests passed, and the production build succeeded. A newly created post remained saved after restarting the application, confirming manual database persistence. The separate automated MongoDB integration test has not been run on Windows.
 
-Browser checks confirmed: loading six sample records, no-match search, bookmarking, bookmarks after refresh, category filtering, rejecting whitespace-only titles, posting a valid fictional item, contact details, and the returned confirmation/count updates. See [test notes](docs/testing.md) for results and remaining checks.
+After the date-filter iteration, `npm test` passed all 26 tests and `npm run build` passed in the coding workspace. Browser checks confirmed inclusive boundaries, combined search/category/Found filters, a reversed-range error, clearing dates while retaining other filters, and clearing all filters from a no-match state. A fresh clone of the published GitHub repository had also passed installation, the original 16 tests, a build and demo startup before this iteration. See [test notes](docs/testing.md) for the scope of each check.
+
+Earlier browser checks confirmed: loading six sample records, no-match search, bookmarking, bookmarks after refresh, category filtering, rejecting whitespace-only titles, posting a valid fictional item, contact details, and the returned confirmation/count updates. See [test notes](docs/testing.md) for results and remaining checks.
 
 ## Vibe Coding Reflection
 
@@ -227,11 +245,11 @@ The initial setup assumed a MongoDB binary would run in the coding environment. 
 
 ### 3. How did you verify AI-generated code?
 
-I ran all 16 automated tests and successfully built the application on Windows. I also created a new post, restarted the application, and confirmed that the post remained saved in MongoDB. The automated API tests use a temporary demo store, while my restart check separately verified real database persistence.
+I ran all 16 automated tests and successfully built the application on Windows. I also created a new post, restarted the application, and confirmed that the post remained saved in MongoDB. The automated API tests use a temporary demo store, while my restart check separately verified real database persistence. After adding the date range filter, the coding assistant ran the expanded 26-test suite, built the application, and checked valid, invalid, combined and reset states in the browser. This new feature still needs my own Windows review after I pull the update.
 
 ### 4. How did your prompts evolve?
 
-The conversation began with broad requests such as “more ideas”, then narrowed to MERN and a specific lost-and-found application. The resulting implementation became more specific through observed failures: a successful build was not enough, a demo had to be labelled honestly, and return actions needed confirmation and updated counts. A useful next prompt would specify an observed problem, expected behaviour and an acceptance check, rather than simply asking to “make it better”.
+My early prompts were broad, such as “more ideas” and “or MERN application?” Later, I shared the exact `npm ci` error and terminal output so troubleshooting could target the folder and command I was using. My date-filter prompt was more specific: it requested a feature, required it to combine with existing filters, identified an invalid range, and explicitly asked for tests. That produced a concrete improvement with observable success and error states instead of a general request to “make it better”.
 
 ### 5. What did you learn?
 
@@ -257,7 +275,7 @@ This is a classroom prototype, not a public production service. There is no auth
 
 Submit an accessible **GitHub repository URL**. The README, source and screenshots belong in that repository. Public internet deployment is not required by the assignment.
 
-The ZIP contains its real `.git` history. Use [the setup guide](GETTING_STARTED.md) to preserve the commits when publishing. Commits were made during one AI-assisted session; they are not evidence of work spread across different days. No personal local test or successful GitHub publication is claimed until the student performs it.
+The ZIP contains its real `.git` history. Use [the setup guide](GETTING_STARTED.md) to preserve the commits when publishing. Commits were made during one AI-assisted session; they are not evidence of work spread across different days. The application was published to GitHub and manually checked with local MongoDB on Windows. Later feature checks performed by the coding assistant are distinguished from the student’s Windows checks in the test notes.
 
 ## Documentation sources
 

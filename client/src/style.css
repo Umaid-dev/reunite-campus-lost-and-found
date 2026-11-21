@@ -456,6 +456,65 @@ select {
   pointer-events: none;
   color: #75806e;
 }
+.date-filters {
+  min-width: 0;
+  margin: 20px 0 0;
+  padding: 0;
+  border: 0;
+}
+.date-filters legend {
+  margin-bottom: 10px;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 700;
+}
+.date-filter-fields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+}
+.date-filter-field {
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 200px;
+  min-width: 0;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.date-filter-field input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  font-size: 14px;
+}
+.date-filter-field input[aria-invalid='true'] {
+  border-color: #a2392d;
+}
+.clear-dates {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+}
+.date-filter-help,
+.date-range-error {
+  margin: 9px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.date-filter-help {
+  color: var(--muted);
+}
+.date-range-error {
+  color: #a2392d;
+}
 .filter-row {
   display: flex;
   justify-content: space-between;

@@ -2,10 +2,10 @@
 
 ## Automated checks
 
-`npm test` passed 16 tests in the coding workspace:
+`npm test` now passes 26 tests in the coding workspace:
 
 - 9 HTTP tests against the explicit temporary demo repository.
-- 5 board search/filter/sort/count tests.
+- 15 board search/filter/sort/count and date-range tests (10 added in the date-filter iteration).
 - 2 Mongoose schema tests without a live database.
 
 `npm run build` passed for the React production bundle.
@@ -35,15 +35,13 @@ Screenshots show actual demo-mode browser states. No real person was contacted a
 
 ## Remaining checks
 
-- Real MongoDB/Atlas connection, creation and status persistence after application restart.
-- A clean clone from the actual published GitHub URL (not yet available in this workspace).
+- Automated live MongoDB integration, Atlas-specific setup and returned-status persistence across restarts. Creation persistence was manually verified on Windows, as recorded below.
 - Dedicated mobile viewport inspection and a complete keyboard/screen-reader audit. Responsive CSS and native dialogs are included, but these do not constitute an accessibility certification.
 - Student review of source and reflection.
 
 ## Clean checkout check
 
-A fresh local Git clone was created from the project repository. In that clone, `npm ci`, all 16 standard tests and `npm run build` completed successfully. No copied `node_modules`, `.env` or build directory was used. This verifies a clean local clone; an actual GitHub clone remains pending until publication.
-
+A fresh local Git clone was created from the project repository. In that clone, `npm ci`, all 16 standard tests and `npm run build` completed successfully. No copied `node_modules`, `.env` or build directory was used. After publication, a separate fresh clone of `https://github.com/Umaid-dev/reunite-campus-lost-and-found` was tested: `npm ci`, all 16 tests present at that point, `npm run build`, demo startup, frontend HTTP, proxied API health and six sample records passed. No existing `.env`, dependency directory or build output was copied into that clone. The date-filter changes were then implemented in that checkout.
 
 ## Windows verification — November 21, 2026
 
@@ -51,3 +49,33 @@ A fresh local Git clone was created from the project repository. In that clone, 
 - A newly created item remained on the board after restarting the application.
 - `npm test`: all 16 tests passed, with zero failures.
 - `npm run build`: production build completed successfully.
+
+## Date range iteration — November 21, 2026
+
+The coding assistant ran `npm test` (26 passed, zero failures) and `npm run build` successfully after adding the feature. This is separate from the student's earlier 16-test Windows run.
+
+Ten new automated cases cover:
+
+- Inclusive lower and upper boundaries, including an exact single day.
+- Start-only and end-only ranges.
+- Intersection with search, category and open report type filters.
+- Lost and returned tabs.
+- Saved-only filtering and oldest-first sorting.
+- Rejection of reversed ranges instead of silently showing all results.
+- Empty and one-sided ranges without order errors.
+- Cleared dates retaining the other filters, and valid ranges with no matching items.
+
+Actual browser checks in temporary demo mode:
+
+| Action                                                    | Observed result                                                           |
+| --------------------------------------------------------- | ------------------------------------------------------------------------- |
+| November 19–20 range, no other filters                    | Four items on both inclusive boundaries                                   |
+| Library search + Electronics + Found + November 19–21     | One matching Sony headphones post                                         |
+| Change end date to November 18 while start is November 19 | Inline error and invalid-range state; no matching cards shown             |
+| Clear dates                                               | Both fields empty, error removed; Library, Electronics and Found retained |
+| November 1–8 range                                        | No-match state with Clear filters                                         |
+| Clear filters                                             | Dates and other filters cleared; all six sample posts restored            |
+
+Screenshots: [combined date filters](screenshots/date-range.jpg) and [reversed range](screenshots/date-range-error.jpg).
+
+These browser checks do not claim dedicated mobile or screen-reader verification. The new feature still needs the student's own Windows review after updating the local checkout.

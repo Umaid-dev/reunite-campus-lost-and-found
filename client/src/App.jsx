@@ -15,7 +15,7 @@ import {
   ChevronDown,
 } from 'lucide-react';
 import { CATEGORIES } from '../../shared/constants.js';
-import { selectItems, stats } from '../../shared/board.js';
+import { getDateRangeError, selectItems, stats } from '../../shared/board.js';
 import { api } from './api.js';
 import Modal from './components/Modal.jsx';
 import ReportForm from './components/ReportForm.jsx';
@@ -38,6 +38,8 @@ export default function App() {
     [category, setCategory] = useState('All categories'),
     [type, setType] = useState('all'),
     [sort, setSort] = useState('newest');
+  const [startDate, setStartDate] = useState(''),
+    [endDate, setEndDate] = useState('');
   const [view, setView] = useState('board'),
     [saved, setSaved] = useState(readSaved),
     [modal, setModal] = useState(null),
@@ -91,6 +93,8 @@ export default function App() {
     setQuery('');
     setCategory('All categories');
     setType('all');
+    setStartDate('');
+    setEndDate('');
   }
   async function markReturned() {
     setBusy(true);
@@ -110,6 +114,7 @@ export default function App() {
       setBusy(false);
     }
   }
+  const dateRangeError = getDateRangeError(startDate, endDate);
   const filtered = selectItems(items, {
     query,
     category,
@@ -117,6 +122,8 @@ export default function App() {
     savedOnly: view === 'saved',
     saved,
     sort,
+    startDate,
+    endDate,
   });
   const counts = stats(items);
   const savedCount = items.filter((x) => saved.includes(x._id)).length;
@@ -259,7 +266,9 @@ export default function App() {
             <span className="results-count" aria-live="polite">
               {loading
                 ? 'Loading items…'
-                : `${filtered.length} ${filtered.length === 1 ? 'item' : 'items'} on the board`}
+                : dateRangeError
+                  ? 'Check your date range'
+                  : `${filtered.length} ${filtered.length === 1 ? 'item' : 'items'} on the board`}
             </span>
           </div>
           <div className="search-row">
@@ -292,6 +301,55 @@ export default function App() {
               <ChevronDown size={16} />
             </label>
           </div>
+          <fieldset className="date-filters">
+            <legend>Lost or found date</legend>
+            <div className="date-filter-fields">
+              <label className="date-filter-field">
+                <span>From</span>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  aria-invalid={Boolean(dateRangeError)}
+                  aria-describedby={
+                    dateRangeError ? 'date-range-help date-range-error' : 'date-range-help'
+                  }
+                />
+              </label>
+              <label className="date-filter-field">
+                <span>To</span>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  aria-invalid={Boolean(dateRangeError)}
+                  aria-describedby={
+                    dateRangeError ? 'date-range-help date-range-error' : 'date-range-help'
+                  }
+                />
+              </label>
+              {(startDate || endDate) && (
+                <button
+                  className="text-btn clear-dates"
+                  onClick={() => {
+                    setStartDate('');
+                    setEndDate('');
+                  }}
+                >
+                  <RotateCcw size={14} />
+                  Clear dates
+                </button>
+              )}
+            </div>
+            <p id="date-range-help" className="date-filter-help">
+              Either date is optional. Both dates are included in the range.
+            </p>
+            {dateRangeError && (
+              <p id="date-range-error" className="date-range-error" role="alert">
+                {dateRangeError}
+              </p>
+            )}
+          </fieldset>
           <div className="filter-row">
             <div className="filter-tabs" aria-label="Filter items by report type or status">
               {[
@@ -340,6 +398,12 @@ export default function App() {
                 Try again
               </button>
             </div>
+          ) : dateRangeError ? (
+            <div className="empty">
+              <CalendarDays size={35} />
+              <h3>Check your date range.</h3>
+              <p>Choose an end date on or after the start date, or clear the dates above.</p>
+            </div>
           ) : filtered.length === 0 ? (
             <div className="empty">
               <SearchX size={35} />
@@ -349,7 +413,7 @@ export default function App() {
               <p>
                 {view === 'saved'
                   ? 'Save an item using its bookmark button, or adjust your filters.'
-                  : 'Try another keyword or category. You can also post an item.'}
+                  : 'Try another keyword, category or date range. You can also post an item.'}
               </p>
               <button className="btn outline" onClick={clearFilters}>
                 Clear filters
