@@ -209,11 +209,13 @@ npm run test:mongo
 
 In the coding workspace, MongoDB 8 failed during CPU detection and MongoDB 7 failed with `open: Operation not permitted`. The integration test is retained for a compatible machine, but **it has not passed here**. A passing build or schema check does not prove live MongoDB persistence. Verify your own MongoDB/Atlas connection and rerun the integration test before claiming the full MERN path is tested.
 
+On Windows, the MongoDB application ran successfully, all 16 standard tests passed, and the production build succeeded. A newly created post remained saved after restarting the application, confirming manual database persistence. The separate automated MongoDB integration test has not been run on Windows.
+
 Browser checks confirmed: loading six sample records, no-match search, bookmarking, bookmarks after refresh, category filtering, rejecting whitespace-only titles, posting a valid fictional item, contact details, and the returned confirmation/count updates. See [test notes](docs/testing.md) for results and remaining checks.
 
 ## Vibe Coding Reflection
 
-This draft reflects the recorded AI-assisted session. Review it and add your own local testing observations before submission.
+This reflection describes the AI-assisted development and my local testing of Reunite.
 
 ### 1. What did AI do particularly well?
 
@@ -225,7 +227,7 @@ The initial setup assumed a MongoDB binary would run in the coding environment. 
 
 ### 3. How did you verify AI-generated code?
 
-The project was checked with 16 automated tests, a production build, and browser interactions. Whitespace-only titles, impossible dates and extra fields were tested rather than trusting client validation. A fictional charger was created and marked returned in the browser. Live MongoDB persistence still needs verification on a compatible machine.
+I ran all 16 automated tests and successfully built the application on Windows. I also created a new post, restarted the application, and confirmed that the post remained saved in MongoDB. The automated API tests use a temporary demo store, while my restart check separately verified real database persistence.
 
 ### 4. How did your prompts evolve?
 
