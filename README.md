@@ -170,13 +170,13 @@ The interface exposes the returned transition. The API also accepts `open` to su
 
 AI helped turn an application choice into React components, an Express API, a Mongoose schema and testable helper functions. It also helped diagnose failed startup assumptions and separate a runnable demo from real database verification.
 
-Three actual user prompts from the planning conversation that influenced the project were:
+Three examples from my planning and troubleshooting conversation were:
 
-1. **“or MERN application?”** — established the full-stack technology direction instead of a browser-only app.
-2. **“more ideas”** — expanded the shortlist to the lost and found board.
-3. **“Ok lets make it”** — selected the lost and found idea and authorised implementation.
+1. **“or MERN application?”** — established MongoDB, Express, React, and Node.js as the technology stack.
+2. **“Ok lets create Campus Lost and Found Application ”** — selected the campus lost-and-found idea and started implementation.
+3. **Shared the `npm ci` error: “can only install with an existing package-lock.json”** — helped identify that I was running the command in the outer folder. Switching into `reunite` allowed installation to succeed.
 
-These were broad planning prompts. The implementation and testing stages are recorded in [the development log](docs/development-log.md). [The prompt notes](docs/prompts.md) distinguish actual prompts from more specific follow-up prompts proposed for the student's next iteration. Proposed prompts are not represented as already used.
+These examples show project planning and troubleshooting based on actual terminal output. Further development details are recorded in [the development log](docs/development-log.md) and [the prompt notes](docs/prompts.md).
 
 ## Screenshots
 
