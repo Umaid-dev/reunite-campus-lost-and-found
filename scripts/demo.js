@@ -1,33 +1,28 @@
-import { MongoMemoryServer } from 'mongodb-memory-server';
-import mongoose from 'mongoose';
-import { spawn } from 'node:child_process';
-import { Item } from '../server/item.js';
+import { createApp } from '../server/app.js';
+import { createDemoRepository } from '../server/repositories.js';
 import { sampleItems } from '../server/sample-data.js';
-let mongo;
-const children = [];
+import { spawn } from 'node:child_process';
+const server = createApp({ repository: createDemoRepository(sampleItems()), mode: 'demo' }).listen(
+  5000,
+  '0.0.0.0',
+  () =>
+    console.log(
+      'Demo API ready on port 5000. Temporary sample data; MongoDB is not used in this mode.',
+    ),
+);
+const child = spawn(
+  process.execPath,
+  ['node_modules/vite/bin/vite.js', '--config', 'client/vite.config.js', ...process.argv.slice(2)],
+  { stdio: 'inherit' },
+);
 let stopping = false;
-async function stop(code = 0) {
+function stop(code = 0) {
   if (stopping) return;
   stopping = true;
-  for (const child of children) child.kill('SIGTERM');
-  await mongoose.disconnect();
-  if (mongo) await mongo.stop();
-  process.exit(code);
+  child.kill('SIGTERM');
+  server.close(() => process.exit(code));
 }
-try {
-  console.log('Starting a temporary MongoDB database. The first run downloads MongoDB; internet access is required.');
-  mongo = await MongoMemoryServer.create();
-  const uri = mongo.getUri('reunite_demo');
-  await mongoose.connect(uri);
-  await Item.insertMany(sampleItems());
-  await mongoose.disconnect();
-  for (const [file, args] of [['server/index.js', []], ['node_modules/vite/bin/vite.js', ['--config', 'client/vite.config.js']]]) {
-    const child = spawn(process.execPath, [file, ...args], { stdio: 'inherit', env: { ...process.env, MONGODB_URI: uri, PORT: '5000' } });
-    children.push(child);
-    child.once('exit', code => { if (!stopping) void stop(code || 0); });
-    child.once('error', () => void stop(1));
-  }
-  console.log('Demo data is temporary and resets when this command stops.');
-  process.on('SIGINT', () => void stop());
-  process.on('SIGTERM', () => void stop());
-} catch (error) { console.error(`Demo could not start: ${error.message}`); await stop(1); }
+child.once('exit', (code) => stop(code || 0));
+child.once('error', () => stop(1));
+process.on('SIGINT', () => stop());
+process.on('SIGTERM', () => stop());
