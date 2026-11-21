@@ -43,3 +43,11 @@ Screenshots show actual demo-mode browser states. No real person was contacted a
 ## Clean checkout check
 
 A fresh local Git clone was created from the project repository. In that clone, `npm ci`, all 16 standard tests and `npm run build` completed successfully. No copied `node_modules`, `.env` or build directory was used. This verifies a clean local clone; an actual GitHub clone remains pending until publication.
+
+
+## Windows verification — November 21, 2026
+
+- MongoDB service was running, and the application started successfully.
+- A newly created item remained on the board after restarting the application.
+- `npm test`: all 16 tests passed, with zero failures.
+- `npm run build`: production build completed successfully.
