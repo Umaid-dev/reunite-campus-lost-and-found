@@ -58,4 +58,10 @@ Development was performed with ChatGPT/Codex in one session. The commits are gen
 
 ## Remaining review
 
-The student should pull the feature update and review it on Windows. Automated live MongoDB integration, returned-status persistence across restarts, dedicated mobile viewport testing and a full accessibility audit remain separate from the completed checks.
+The student ran the updated application on Windows and provided a screenshot confirming reversed-range validation. Other date-filter combinations on Windows remain distinct from the coding assistant’s browser checks. Automated live MongoDB integration, returned-status persistence across restarts, dedicated mobile viewport testing and a full accessibility audit remain separate from the completed checks.
+
+## Stage 7 — Complete rubric documentation
+
+- Checked every rubric category and all copies of the supplied student checklist.
+- Added the requested root-level `PROMPT.md` with the chronological creation, troubleshooting, verification and refinement log.
+- Linked the full log from the README and updated the Windows date-validation evidence.

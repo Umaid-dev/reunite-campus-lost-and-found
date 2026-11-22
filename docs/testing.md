@@ -78,4 +78,4 @@ Actual browser checks in temporary demo mode:
 
 Screenshots: [combined date filters](screenshots/date-range.jpg) and [reversed range](screenshots/date-range-error.jpg).
 
-These browser checks do not claim dedicated mobile or screen-reader verification. The new feature still needs the student's own Windows review after updating the local checkout.
+These browser checks do not claim dedicated mobile or screen-reader verification. A later student-provided Windows screenshot confirmed the updated controls and reversed-range validation: From `2026-11-21`, To `2026-11-19`, red field borders, the range-order error and the invalid-range state. The expanded 26-test Windows terminal output has not been provided; the 26-test result above belongs to the coding workspace.

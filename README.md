@@ -174,11 +174,11 @@ AI helped turn an application choice into React components, an Express API, a Mo
 
 Three examples from my planning, troubleshooting and refinement conversation were:
 
-1. **“or MERN application?”** — established MongoDB, Express, React, and Node.js as the technology stack.
+1. **“Let make a MERN applicatiom?”** — established MongoDB, Express, React, and Node.js as the technology stack.
 2. **Shared the `npm ci` error: “can only install with an existing package-lock.json”** — helped identify that I was running the command in the outer folder. Switching into `reunite` allowed installation to succeed.
 3. **“Add a date range filter to Reunite. It should work together with search, category, and status filters. Validate that the end date is not before the start date, and test the filtering behavior.”** — led to inclusive From/To controls, combined filtering, a reversed-range error, reset controls and 10 new automated tests. The resulting suite passes all 26 tests, and the browser behavior was checked separately.
 
-These examples show how broad planning became troubleshooting using actual terminal output, followed by a specific feature request with validation and testing requirements. Further details are recorded in [the development log](docs/development-log.md) and [the prompt notes](docs/prompts.md).
+These examples show how broad planning became troubleshooting using actual terminal output, followed by a specific feature request with validation and testing requirements. The complete chronological creation log is in [PROMPT.md](PROMPT.md). Further implementation details are recorded in [the development log](docs/development-log.md) and [the prompt notes](docs/prompts.md).
 
 ## Screenshots
 
@@ -229,6 +229,8 @@ On Windows, the MongoDB application ran successfully, all 16 standard tests pass
 
 After the date-filter iteration, `npm test` passed all 26 tests and `npm run build` passed in the coding workspace. Browser checks confirmed inclusive boundaries, combined search/category/Found filters, a reversed-range error, clearing dates while retaining other filters, and clearing all filters from a no-match state. A fresh clone of the published GitHub repository had also passed installation, the original 16 tests, a build and demo startup before this iteration. See [test notes](docs/testing.md) for the scope of each check.
 
+A later Windows screenshot also confirmed the new From/To controls and reversed-range validation in the persistent MongoDB application.
+
 Earlier browser checks confirmed: loading six sample records, no-match search, bookmarking, bookmarks after refresh, category filtering, rejecting whitespace-only titles, posting a valid fictional item, contact details, and the returned confirmation/count updates. See [test notes](docs/testing.md) for results and remaining checks.
 
 ## Vibe Coding Reflection
@@ -245,7 +247,7 @@ The initial setup assumed a MongoDB binary would run in the coding environment. 
 
 ### 3. How did you verify AI-generated code?
 
-I ran all 16 automated tests and successfully built the application on Windows. I also created a new post, restarted the application, and confirmed that the post remained saved in MongoDB. The automated API tests use a temporary demo store, while my restart check separately verified real database persistence. After adding the date range filter, the coding assistant ran the expanded 26-test suite, built the application, and checked valid, invalid, combined and reset states in the browser. This new feature still needs my own Windows review after I pull the update.
+I ran all 16 automated tests and successfully built the application on Windows. I also created a new post, restarted the application, and confirmed that the post remained saved in MongoDB. The automated API tests use a temporary demo store, while my restart check separately verified real database persistence. After adding the date range filter, the coding assistant ran the expanded 26-test suite, built the application, and checked valid, invalid, combined and reset states in the browser. I also ran the updated application on Windows and checked that a November 21 start with a November 19 end displayed the range-order error. The expanded automated suite was run by the coding assistant; my original Windows terminal result covers 16 tests.
 
 ### 4. How did your prompts evolve?
 
